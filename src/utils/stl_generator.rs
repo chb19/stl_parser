@@ -1,14 +1,14 @@
 use std::{f32::consts::PI, path::PathBuf};
 
 use super::{
-    stl_parser::{STLParser, Triangle, Triangles},
+    stl_parser::{StlParser, Triangle, Triangles},
     vec3::{Float, Vec3},
-    STLFormat,
+    StlFormat,
 };
 
-pub struct STLGenerator;
+pub struct StlGenerator;
 
-impl STLGenerator {
+impl StlGenerator {
     fn generate_cube(a: Float, origin: Vec3) -> Triangles {
         let mut v: Vec<Vec3> = Vec::new();
 
@@ -85,12 +85,12 @@ impl STLGenerator {
         a: Float,
         origin: Vec3,
         output: PathBuf,
-        format: STLFormat,
+        format: StlFormat,
     ) -> anyhow::Result<()> {
-        let triangles = STLGenerator::generate_cube(a, origin);
+        let triangles = StlGenerator::generate_cube(a, origin);
         match format {
-            STLFormat::ASCII => STLParser::write_ascii_stl(output, triangles)?,
-            STLFormat::Binary => STLParser::write_binary_stl(output, triangles)?,
+            StlFormat::ASCII => StlParser::write_to_ascii_file(output, triangles)?,
+            StlFormat::Binary => StlParser::write_to_binary_file(output, triangles)?,
         }
         Ok(())
     }
@@ -131,13 +131,13 @@ impl STLGenerator {
         h: Float,
         origin: Vec3,
         output: PathBuf,
-        format: STLFormat,
+        format: StlFormat,
     ) -> anyhow::Result<()> {
-        let triangles = STLGenerator::generate_cone(n as usize, r, h, origin);
+        let triangles = StlGenerator::generate_cone(n as usize, r, h, origin);
 
         match format {
-            STLFormat::ASCII => STLParser::write_ascii_stl(output, triangles)?,
-            STLFormat::Binary => STLParser::write_binary_stl(output, triangles)?,
+            StlFormat::ASCII => StlParser::write_to_ascii_file(output, triangles)?,
+            StlFormat::Binary => StlParser::write_to_binary_file(output, triangles)?,
         }
         Ok(())
     }

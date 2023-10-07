@@ -9,7 +9,7 @@ pub mod stl_parser;
 mod vec3;
 
 #[derive(Debug, Clone, Copy, clap::ValueEnum)]
-pub enum STLFormat {
+pub enum StlFormat {
     Binary,
     ASCII,
 }

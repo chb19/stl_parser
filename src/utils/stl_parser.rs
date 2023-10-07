@@ -18,13 +18,13 @@ pub struct Triangle {
 
 pub type Triangles = Vec<Triangle>;
 
-pub struct STLParser;
+pub struct StlParser;
 
-impl STLParser {
+impl StlParser {
     pub fn read_stl(path: PathBuf) -> anyhow::Result<Triangles> {
-        match STLParser::read_binary_stl(path.clone()) {
+        match StlParser::read_binary_stl(path.clone()) {
             Ok(triangles) => Ok(triangles),
-            Err(err_bin) => match STLParser::read_ascii_stl(path) {
+            Err(err_bin) => match StlParser::read_ascii_stl(path) {
                 Ok(triangles) => Ok(triangles),
                 Err(err) => {
                     Err(anyhow::anyhow!(
@@ -95,7 +95,7 @@ impl STLParser {
         Ok(triangles)
     }
 
-    pub fn write_binary_stl(path: PathBuf, triangles: Triangles) -> anyhow::Result<()> {
+    pub fn write_to_binary_file(path: PathBuf, triangles: Triangles) -> anyhow::Result<()> {
         let mut file = OpenOptions::new()
             .write(true)
             .create(true)
@@ -228,7 +228,7 @@ impl STLParser {
         Ok(triangles)
     }
 
-    pub fn write_ascii_stl(path: PathBuf, triangles: Triangles) -> anyhow::Result<()> {
+    pub fn write_to_ascii_file(path: PathBuf, triangles: Triangles) -> anyhow::Result<()> {
         let mut file = OpenOptions::new()
             .write(true)
             .create(true)
@@ -241,7 +241,7 @@ impl STLParser {
                 )
             })?;
 
-        writeln!(file, "solid RustSTLParser")?;
+        writeln!(file, "solid RustStlParser")?;
         for triangle in triangles {
             let normal = triangle.normal;
             writeln!(
@@ -261,7 +261,7 @@ impl STLParser {
             writeln!(file, " endfacet")?;
             writeln!(file)?;
         }
-        writeln!(file, "endsolid RustSTLParser")?;
+        writeln!(file, "endsolid RustStlParser")?;
         Ok(())
     }
 }

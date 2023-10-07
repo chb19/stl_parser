@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use clap::Parser;
 
-use stl_parser::utils::{stl_generator::STLGenerator, stl_parser::STLParser, Command, STLFormat};
+use stl_parser::utils::{stl_generator::StlGenerator, stl_parser::StlParser, Command, StlFormat};
 
 #[derive(Debug, Parser)]
 #[command(author, version, about, long_about = None)]
@@ -14,7 +14,7 @@ struct Args {
     /// format of the output file
     #[arg(long)]
     #[clap(value_enum)]
-    output_format: STLFormat,
+    output_format: StlFormat,
 
     /// supported commands
     #[command(subcommand)]
@@ -45,17 +45,17 @@ fn main() -> anyhow::Result<()> {
 
     match args.command {
         Command::Cone { n, r, h, origin } => {
-            STLGenerator::generate_cone_stl(n, r, h, origin, output, args.output_format)?
+            StlGenerator::generate_cone_stl(n, r, h, origin, output, args.output_format)?
         }
         Command::Cube { a, origin } => {
-            STLGenerator::generate_cube_stl(a, origin, output, args.output_format)?
+            StlGenerator::generate_cube_stl(a, origin, output, args.output_format)?
         }
         Command::Parse { input } => {
-            let triangles = STLParser::read_stl(input)?;
+            let triangles = StlParser::read_stl(input)?;
 
             match args.output_format {
-                STLFormat::ASCII => STLParser::write_ascii_stl(output, triangles)?,
-                STLFormat::Binary => STLParser::write_binary_stl(output, triangles)?,
+                StlFormat::ASCII => StlParser::write_to_ascii_file(output, triangles)?,
+                StlFormat::Binary => StlParser::write_to_binary_file(output, triangles)?,
             }
         }
     }
